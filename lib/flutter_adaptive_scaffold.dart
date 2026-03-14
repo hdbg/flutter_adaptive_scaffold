@@ -4,5 +4,6 @@
 
 export 'src/adaptive_layout.dart';
 export 'src/material/adaptive_scaffold.dart';
+export 'src/material/material_breakpoints.dart';
 export 'src/breakpoints.dart';
 export 'src/slot_layout.dart';
