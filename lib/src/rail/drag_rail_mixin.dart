@@ -160,7 +160,7 @@ mixin DragRailStateMixin<T extends StatefulWidget>
         selectedLabelTextStyle: selectedLabelTextStyle,
         unselectedLabelTextStyle: unSelectedLabelTextStyle,
         destinations: destinations,
-        scrollable: false,
+        scrollable: true,
       ),
     );
   }

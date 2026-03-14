@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_adaptive_scaffold/src/rail/drag_rail_mixin.dart';
 
@@ -138,7 +139,16 @@ class _OverlayDragRailState extends State<OverlayDragRail>
 
   void _showOverlay() {
     if (!_overlayController.isShowing) {
-      _overlayController.show();
+      if (SchedulerBinding.instance.schedulerPhase ==
+          SchedulerPhase.persistentCallbacks) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && !_overlayController.isShowing) {
+            _overlayController.show();
+          }
+        });
+      } else {
+        _overlayController.show();
+      }
     }
   }
 

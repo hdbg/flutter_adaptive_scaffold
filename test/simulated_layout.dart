@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:flutter_adaptive_scaffold/src/material/material_breakpoints.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_breakpoints.dart';
@@ -80,22 +81,40 @@ class TestScaffoldState extends State<TestScaffold> {
       drawerBreakpoint: NeverOnBreakpoint(),
       appBarBreakpoint: widget.appBarBreakpoint,
       internalAnimations: widget.isAnimated,
-      smallBreakpoint: TestBreakpoint0(),
-      mediumBreakpoint: TestBreakpoint800(),
-      mediumLargeBreakpoint: TestBreakpoint1000(),
-      largeBreakpoint: TestBreakpoint1200(),
-      extraLargeBreakpoint: TestBreakpoint1600(),
+      breakpoints: MaterialBreakpoints(
+        small: TestBreakpoint0(),
+        medium: TestBreakpoint800(),
+        mediumLarge: TestBreakpoint1000(),
+        large: TestBreakpoint1200(),
+        extraLarge: TestBreakpoint1600(),
+      ),
       destinations: TestScaffold.destinations,
-      smallBody: (_) => Container(color: Colors.red),
-      body: (_) => Container(color: Colors.green),
-      mediumLargeBody: (_) => Container(color: Colors.blue),
-      largeBody: (_) => Container(color: Colors.yellow),
-      extraLargeBody: (_) => Container(color: Colors.purple),
-      smallSecondaryBody: (_) => Container(color: Colors.red),
-      secondaryBody: (_) => Container(color: Colors.green),
-      mediumLargeSecondaryBody: (_) => Container(color: Colors.blue),
-      largeSecondaryBody: (_) => Container(color: Colors.yellow),
-      extraLargeSecondaryBody: (_) => Container(color: Colors.purple),
+      body: MaterialBuilders(
+        smallBody: (_) => Container(key: const Key('smallBody'), color: Colors.red),
+        body: (_) => Container(key: const Key('body'), color: Colors.green),
+        mediumLargeBody: (_) => Container(
+          key: const Key('mediumLargeBody'),
+          color: Colors.blue,
+        ),
+        largeBody: (_) => Container(key: const Key('largeBody'), color: Colors.yellow),
+        extraLargeBody: (_) => Container(
+          key: const Key('extraLargeBody'),
+          color: Colors.purple,
+        ),
+      ),
+      secondaryBody: MaterialBuilders(
+        smallBody: (_) => Container(key: const Key('smallSBody'), color: Colors.red),
+        body: (_) => Container(key: const Key('sBody'), color: Colors.green),
+        mediumLargeBody: (_) => Container(
+          key: const Key('mediumLargeSBody'),
+          color: Colors.blue,
+        ),
+        largeBody: (_) => Container(key: const Key('largeSBody'), color: Colors.yellow),
+        extraLargeBody: (_) => Container(
+          key: const Key('extraLargeSBody'),
+          color: Colors.purple,
+        ),
+      ),
       leadingExtendedNavRail: const Text('leading_extended'),
       leadingUnextendedNavRail: const Text('leading_unextended'),
       trailingNavRail: const Text('trailing'),

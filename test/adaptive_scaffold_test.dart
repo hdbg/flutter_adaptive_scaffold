@@ -4,10 +4,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/src/material/adaptive_scaffold.dart';
+import 'package:flutter_adaptive_scaffold/src/material/material_breakpoints.dart';
+import 'package:flutter_adaptive_scaffold/src/rail/navrail.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'simulated_layout.dart';
 import 'test_breakpoints.dart';
+
+MaterialBuilders bodyOnly([WidgetBuilder? builder]) =>
+    MaterialBuilders(body: builder ?? (_) => const SizedBox.shrink());
 
 void main() {
   testWidgets('adaptive scaffold lays out slots as expected',
@@ -54,10 +59,10 @@ void main() {
     expect(bottomNav, findsNothing);
     expect(primaryNav, findsOneWidget);
 
-    expect(tester.getTopLeft(body), const Offset(88, 0));
+    expect(tester.getTopLeft(body), const Offset(72, 0));
     expect(tester.getTopLeft(sBody), const Offset(400, 0));
     expect(tester.getTopLeft(primaryNav), Offset.zero);
-    expect(tester.getBottomRight(primaryNav), const Offset(88, 2000));
+    expect(tester.getBottomRight(primaryNav), const Offset(72, 2000));
 
     await tester.binding.setSurfaceSize(SimulatedLayout.mediumLarge.size);
     await tester.pumpWidget(SimulatedLayout.mediumLarge.scaffold(tester));
@@ -70,10 +75,10 @@ void main() {
     expect(primaryNav, findsNothing);
     expect(primaryNav1, findsOneWidget);
 
-    expect(tester.getTopLeft(mediumLargeBody), const Offset(208, 0));
+    expect(tester.getTopLeft(mediumLargeBody), const Offset(192, 0));
     expect(tester.getTopLeft(mediumLargeSBody), const Offset(500, 0));
     expect(tester.getTopLeft(primaryNav1), Offset.zero);
-    expect(tester.getBottomRight(primaryNav1), const Offset(208, 2000));
+    expect(tester.getBottomRight(primaryNav1), const Offset(192, 2000));
 
     await tester.binding.setSurfaceSize(SimulatedLayout.large.size);
     await tester.pumpWidget(SimulatedLayout.large.scaffold(tester));
@@ -86,10 +91,10 @@ void main() {
     expect(primaryNav1, findsNothing);
     expect(primaryNav2, findsOneWidget);
 
-    expect(tester.getTopLeft(largeBody), const Offset(208, 0));
+    expect(tester.getTopLeft(largeBody), const Offset(192, 0));
     expect(tester.getTopLeft(largeSBody), const Offset(600, 0));
     expect(tester.getTopLeft(primaryNav2), Offset.zero);
-    expect(tester.getBottomRight(primaryNav2), const Offset(208, 2000));
+    expect(tester.getBottomRight(primaryNav2), const Offset(192, 2000));
 
     await tester.binding.setSurfaceSize(SimulatedLayout.extraLarge.size);
     await tester.pumpWidget(SimulatedLayout.extraLarge.scaffold(tester));
@@ -102,10 +107,10 @@ void main() {
     expect(primaryNav2, findsNothing);
     expect(primaryNav3, findsOneWidget);
 
-    expect(tester.getTopLeft(extraLargeBody), const Offset(208, 0));
+    expect(tester.getTopLeft(extraLargeBody), const Offset(192, 0));
     expect(tester.getTopLeft(extraLargeSBody), const Offset(800, 0));
     expect(tester.getTopLeft(primaryNav3), Offset.zero);
-    expect(tester.getBottomRight(primaryNav3), const Offset(208, 2000));
+    expect(tester.getBottomRight(primaryNav3), const Offset(192, 2000));
   });
 
   testWidgets('adaptive scaffold animations work correctly',
@@ -121,7 +126,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    expect(tester.getTopLeft(b), const Offset(17.6, 0));
+    expect(tester.getTopLeft(b), const Offset(14.4, 0));
     expect(tester.getBottomRight(b),
         offsetMoreOrLessEquals(const Offset(778.2, 1936), epsilon: 1.0));
     expect(tester.getTopLeft(sBody),
@@ -132,7 +137,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
 
-    expect(tester.getTopLeft(b), const Offset(70.4, 0));
+    expect(tester.getTopLeft(b), const Offset(57.6, 0));
     expect(tester.getBottomRight(b),
         offsetMoreOrLessEquals(const Offset(416.0, 1984), epsilon: 1.0));
     expect(tester.getTopLeft(sBody),
@@ -143,7 +148,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    expect(tester.getTopLeft(b), const Offset(88.0, 0));
+    expect(tester.getTopLeft(b), const Offset(72.0, 0));
     expect(tester.getBottomRight(b), const Offset(400, 2000));
     expect(tester.getTopLeft(sBody), const Offset(400, 0));
     expect(tester.getBottomRight(sBody), const Offset(800, 2000));
@@ -165,7 +170,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 200));
 
-    expect(tester.getTopLeft(b), const Offset(88.0, 0));
+    expect(tester.getTopLeft(b), const Offset(72.0, 0));
     expect(tester.getBottomRight(b), const Offset(400, 2000));
     expect(tester.getTopLeft(sBody), const Offset(400, 0));
     expect(tester.getBottomRight(sBody), const Offset(800, 2000));
@@ -229,6 +234,7 @@ void main() {
               NavigationDestination(
                   icon: Icon(Icons.video_call), label: 'Video'),
             ],
+            body: bodyOnly(),
             appBar: const PreferredSizeWidgetImpl(),
           ),
         ),
@@ -306,6 +312,7 @@ void main() {
             data: const MediaQueryData(size: Size(700, 900)),
             child: AdaptiveScaffold(
               destinations: destinations,
+              body: bodyOnly(),
             ),
           ),
         ),
@@ -313,9 +320,10 @@ void main() {
 
       final Finder fNavigationRail = find.descendant(
         of: find.byType(AdaptiveScaffold),
-        matching: find.byType(NavigationRail),
+        matching: find.byType(ControllableNavRail),
       );
-      final NavigationRail navigationRail = tester.firstWidget(fNavigationRail);
+      final ControllableNavRail navigationRail =
+          tester.firstWidget(fNavigationRail);
       expect(
         navigationRail.destinations,
         isA<List<NavigationRailDestination>>(),
@@ -423,6 +431,7 @@ void main() {
                 return AdaptiveScaffold(
                   destinations: destinations,
                   selectedIndex: selectedDestination,
+                  body: bodyOnly(),
                   onSelectedIndexChange: (int value) {
                     setState(() {
                       selectedDestination = value;
@@ -467,11 +476,11 @@ void main() {
 
       final Finder navigationRailFinder = find.descendant(
         of: primaryNavigationMedium,
-        matching: find.byType(NavigationRail),
+        matching: find.byType(ControllableNavRail),
       );
       expect(navigationRailFinder, findsOneWidget);
 
-      final NavigationRail navigationRailView = tester.firstWidget(
+      final ControllableNavRail navigationRailView = tester.firstWidget(
         navigationRailFinder,
       );
       expect(navigationRailView, isNotNull);
@@ -513,11 +522,11 @@ void main() {
 
       final Finder navigationRailFinder = find.descendant(
         of: primaryNavigationMediumLarge,
-        matching: find.byType(NavigationRail),
+        matching: find.byType(ControllableNavRail),
       );
       expect(navigationRailFinder, findsOneWidget);
 
-      final NavigationRail navigationRailView = tester.firstWidget(
+      final ControllableNavRail navigationRailView = tester.firstWidget(
         navigationRailFinder,
       );
       expect(navigationRailView, isNotNull);
@@ -610,7 +619,10 @@ void main() {
                 return AdaptiveScaffold(
                   destinations: destinations,
                   selectedIndex: selectedDestination,
-                  smallBreakpoint: TestBreakpoint400(),
+                  body: bodyOnly(),
+                  breakpoints: MaterialBreakpoints(
+                    small: TestBreakpoint400(),
+                  ),
                   drawerBreakpoint: TestBreakpoint400(),
                   onSelectedIndexChange: (int value) {
                     setState(() {
@@ -696,8 +708,9 @@ void main() {
           ),
         ),
       );
-      final NavigationRail rail =
-          tester.widget<NavigationRail>(find.byType(NavigationRail));
+      final ControllableNavRail rail = tester.widget<ControllableNavRail>(
+        find.byType(ControllableNavRail),
+      );
       expect(rail.groupAlignment, equals(groupAlignment));
     },
   );
@@ -723,9 +736,9 @@ void main() {
               textDirection: TextDirection.rtl,
               child: AdaptiveScaffold(
                 destinations: destinations,
-                body: (BuildContext context) {
-                  return const SizedBox.shrink();
-                },
+                body: bodyOnly(
+                  (BuildContext context) => const SizedBox(key: Key('body')),
+                ),
               ),
             ),
           ),
@@ -780,6 +793,7 @@ void main() {
               data: const MediaQueryData(size: Size(700, 900)),
               child: AdaptiveScaffold(
                 destinations: destinations,
+                body: bodyOnly(),
               ),
             ),
           ),
@@ -817,6 +831,7 @@ void main() {
           data: const MediaQueryData(size: Size(800, 600)),
           child: AdaptiveScaffold(
             destinations: destinations,
+            body: bodyOnly(),
             navigationRailDestinationBuilder: customMapping,
           ),
         ),
@@ -853,13 +868,15 @@ void main() {
             data: const MediaQueryData(size: Size(800, 600)),
             child: AdaptiveScaffold(
               destinations: destinations,
+              body: bodyOnly(),
             ),
           ),
         ),
       );
 
-      final NavigationRail rail =
-          tester.widget<NavigationRail>(find.byType(NavigationRail));
+      final ControllableNavRail rail = tester.widget<ControllableNavRail>(
+        find.byType(ControllableNavRail),
+      );
       expect(rail.labelType, NavigationRailLabelType.all);
     },
   );
@@ -874,6 +891,7 @@ void main() {
           NavigationDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
           NavigationDestination(icon: Icon(Icons.article), label: 'Articles'),
         ],
+        body: bodyOnly(),
       ),
     ));
     expect(tester.takeException(), isNull);
@@ -885,6 +903,7 @@ void main() {
           NavigationDestination(icon: Icon(Icons.inbox), label: 'Inbox'),
           NavigationDestination(icon: Icon(Icons.article), label: 'Articles'),
         ],
+        body: bodyOnly(),
         navigationRailPadding: const EdgeInsets.only(left: 10),
       ),
     ));
