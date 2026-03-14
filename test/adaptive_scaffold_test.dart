@@ -11,8 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'simulated_layout.dart';
 import 'test_breakpoints.dart';
 
-MaterialBuilders bodyOnly([WidgetBuilder? builder]) =>
-    MaterialBuilders(body: builder ?? (_) => const SizedBox.shrink());
+MaterialSlotBuilders bodyOnly([WidgetBuilder? builder]) =>
+    MaterialSlotBuilders(body: builder ?? (_) => const SizedBox.shrink());
 
 void main() {
   testWidgets('adaptive scaffold lays out slots as expected',
@@ -620,7 +620,7 @@ void main() {
                   destinations: destinations,
                   selectedIndex: selectedDestination,
                   body: bodyOnly(),
-                  breakpoints: MaterialBreakpoints(
+                  breakpoints: MaterialAdaptiveBreakpoints(
                     small: TestBreakpoint400(),
                   ),
                   drawerBreakpoint: TestBreakpoint400(),

@@ -226,14 +226,14 @@ class _MailWorkspaceScreenState extends State<MailWorkspaceScreen> {
           icon: const Icon(Icons.notifications_active_outlined),
         ),
       ),
-      body: MaterialBuilders(
+      body: MaterialSlotBuilders(
         smallBody: (_) => _WorkspaceFeed(tab: activeTab),
         body: (_) => _WorkspaceFeed(tab: activeTab),
         mediumLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
         largeBody: (_) => _WorkspaceFeed(tab: activeTab),
         extraLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
       ),
-      secondaryBody: MaterialBuilders(
+      secondaryBody: MaterialSlotBuilders(
         body: (_) => _WorkspaceDetails(tab: activeTab),
         mediumLargeBody: (_) => _WorkspaceDetails(tab: activeTab),
         largeBody: (_) => _WorkspaceDetails(tab: activeTab),

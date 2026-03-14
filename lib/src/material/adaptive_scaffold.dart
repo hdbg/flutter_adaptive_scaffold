@@ -107,7 +107,7 @@ class AdaptiveScaffold extends StatefulWidget {
     required this.body,
     this.secondaryBody,
     this.bodyRatio,
-    this.breakpoints = const MaterialBreakpoints(),
+    this.breakpoints = const MaterialAdaptiveBreakpoints(),
 
     this.drawerBreakpoint = Breakpoints.smallDesktop,
     this.internalAnimations = true,
@@ -154,10 +154,10 @@ class AdaptiveScaffold extends StatefulWidget {
   final double? groupAlignment;
 
   /// Widget to be displayed in the body slot at the compact breakpoint.
-  final MaterialBuilders body;
+  final MaterialSlotBuilders body;
 
   /// Widget to be displayed in the secondary body slot at the compact breakpoint.
-  final MaterialBuilders? secondaryBody;
+  final MaterialSlotBuilders? secondaryBody;
 
   /// Defines the fractional ratio of body to the secondaryBody.
   ///
@@ -168,7 +168,7 @@ class AdaptiveScaffold extends StatefulWidget {
   /// the center of the screen.
   final double? bodyRatio;
 
-  final MaterialBreakpoints breakpoints;
+  final MaterialAdaptiveBreakpoints breakpoints;
 
   /// Whether or not the developer wants the smooth entering slide transition on
   /// secondaryBody.

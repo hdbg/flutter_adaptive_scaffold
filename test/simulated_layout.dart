@@ -81,7 +81,7 @@ class TestScaffoldState extends State<TestScaffold> {
       drawerBreakpoint: NeverOnBreakpoint(),
       appBarBreakpoint: widget.appBarBreakpoint,
       internalAnimations: widget.isAnimated,
-      breakpoints: MaterialBreakpoints(
+      breakpoints: MaterialAdaptiveBreakpoints(
         small: TestBreakpoint0(),
         medium: TestBreakpoint800(),
         mediumLarge: TestBreakpoint1000(),
@@ -89,7 +89,7 @@ class TestScaffoldState extends State<TestScaffold> {
         extraLarge: TestBreakpoint1600(),
       ),
       destinations: TestScaffold.destinations,
-      body: MaterialBuilders(
+      body: MaterialSlotBuilders(
         smallBody: (_) => Container(key: const Key('smallBody'), color: Colors.red),
         body: (_) => Container(key: const Key('body'), color: Colors.green),
         mediumLargeBody: (_) => Container(
@@ -102,7 +102,7 @@ class TestScaffoldState extends State<TestScaffold> {
           color: Colors.purple,
         ),
       ),
-      secondaryBody: MaterialBuilders(
+      secondaryBody: MaterialSlotBuilders(
         smallBody: (_) => Container(key: const Key('smallSBody'), color: Colors.red),
         body: (_) => Container(key: const Key('sBody'), color: Colors.green),
         mediumLargeBody: (_) => Container(

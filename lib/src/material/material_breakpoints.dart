@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 
-class MaterialBreakpoints {
+class MaterialAdaptiveBreakpoints {
   final Breakpoint small;
   final Breakpoint medium;
   final Breakpoint mediumLarge;
   final Breakpoint large;
   final Breakpoint extraLarge;
 
-  const MaterialBreakpoints({
+  const MaterialAdaptiveBreakpoints({
     this.small = Breakpoints.small,
     this.medium = Breakpoints.medium,
     this.mediumLarge = Breakpoints.mediumLarge,
@@ -17,14 +17,14 @@ class MaterialBreakpoints {
   });
 }
 
-class MaterialBuilders {
+class MaterialSlotBuilders {
   final WidgetBuilder? smallBody;
   final WidgetBuilder? body;
   final WidgetBuilder? mediumLargeBody;
   final WidgetBuilder? largeBody;
   final WidgetBuilder? extraLargeBody;
 
-  const MaterialBuilders({
+  const MaterialSlotBuilders({
     this.smallBody,
     this.body,
     this.mediumLargeBody,
@@ -33,7 +33,7 @@ class MaterialBuilders {
   });
 
   SlotLayout toSlotLayout(
-    MaterialBreakpoints breakpoints, {
+    MaterialAdaptiveBreakpoints breakpoints, {
     String prefix = '',
     Widget Function(Widget, Animation<double>)? inAnimation,
     Widget Function(Widget, Animation<double>)? outAnimation,
