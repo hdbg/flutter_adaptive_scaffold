@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_adaptive_scaffold/src/adaptive_scaffold.dart';
+import 'package:flutter_adaptive_scaffold/src/material/adaptive_scaffold.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'simulated_layout.dart';
