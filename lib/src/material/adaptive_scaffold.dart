@@ -121,6 +121,7 @@ class AdaptiveScaffold extends StatefulWidget {
     this.appBarBreakpoint,
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
+    this.internalAnimations = true,
   }) : assert(
          destinations.length >= 2,
          'At least two destinations are required',
@@ -167,6 +168,12 @@ class AdaptiveScaffold extends StatefulWidget {
   /// layout. Content transitions inside [AdaptiveContent] are controlled by
   /// [AdaptiveContent.transitionDuration].
   final Duration transitionDuration;
+
+  // Whether to use the internal default animations for layout changes. If false,
+  // layout changes will happen without animation, but the user can still use
+  // [AdaptiveLayout] and [SlotLayout] to define custom animations for the layout changes.
+  ///
+  final bool internalAnimations;
 
   /// Whether to use a [Drawer] over a [BottomNavigationBar] when not on mobile
   /// and Breakpoint is small.
@@ -536,6 +543,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             )
           : null,
       body: AdaptiveLayout(
+        internalAnimations: widget.internalAnimations,
         transitionDuration: widget.transitionDuration,
         primaryNavigation: _createPrimaryNavigation(destinations, navRailTheme),
         bottomNavigation:
