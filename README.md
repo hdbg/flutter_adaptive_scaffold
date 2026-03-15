@@ -22,13 +22,15 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 ## What this package provides
 
 - `AdaptiveScaffold` for a higher-level adaptive Material shell
+- `AdaptiveContent` for breakpoint-aware scaffold content
 - `AdaptiveLayout` and `SlotLayout` for lower-level custom layouts
 - `Breakpoint` and `Breakpoints` helpers
 - `MaterialSlotBuilders` and `MaterialAdaptiveBreakpoints` for configuring `AdaptiveScaffold`
 
 ## Quick start
 
-The current `AdaptiveScaffold` API groups body builders into `MaterialSlotBuilders`.
+`AdaptiveScaffold` now accepts a single `body` builder. Use `AdaptiveContent`
+inside it when you want breakpoint-aware primary and secondary content.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -89,22 +91,31 @@ class _InboxScreenState extends State<InboxScreen> {
         });
       },
       destinations: _destinations,
-      body: MaterialSlotBuilders(
-        smallBody: (_) => const _MessageList(compact: true),
-        body: (_) => const _MessageList(),
-        mediumLargeBody: (_) => const _MessageList(),
-        largeBody: (_) => const _MessageList(),
-        extraLargeBody: (_) => const _MessageList(),
-      ),
-      secondaryBody: MaterialSlotBuilders(
-        body: (_) => const _MessageDetail(),
-        mediumLargeBody: (_) => const _MessageDetail(),
-        largeBody: (_) => const _MessageDetail(),
-        extraLargeBody: (_) => const _MessageDetail(),
+      body: (_) => const AdaptiveContent(
+        body: MaterialSlotBuilders(
+          smallBody: _buildCompactMessageList,
+          body: _buildMessageList,
+          mediumLargeBody: _buildMessageList,
+          largeBody: _buildMessageList,
+          extraLargeBody: _buildMessageList,
+        ),
+        secondaryBody: MaterialSlotBuilders(
+          body: _buildMessageDetail,
+          mediumLargeBody: _buildMessageDetail,
+          largeBody: _buildMessageDetail,
+          extraLargeBody: _buildMessageDetail,
+        ),
       ),
     );
   }
 }
+
+Widget _buildCompactMessageList(BuildContext context) =>
+    const _MessageList(compact: true);
+
+Widget _buildMessageList(BuildContext context) => const _MessageList();
+
+Widget _buildMessageDetail(BuildContext context) => const _MessageDetail();
 
 class _MessageList extends StatelessWidget {
   const _MessageList({this.compact = false});
@@ -148,7 +159,8 @@ class _MessageDetail extends StatelessWidget {
 - `medium`: overlay drag rail
 - `mediumLarge` and above: desktop drag rail
 
-For content, `body` and `secondaryBody` are defined with `MaterialSlotBuilders`.
+For content, wrap the scaffold body in `AdaptiveContent`. It accepts
+`MaterialSlotBuilders` for `body` and optional `secondaryBody`.
 Each property is independent:
 
 - `smallBody`
@@ -175,11 +187,26 @@ AdaptiveScaffold(
     large: Breakpoints.large,
     extraLarge: Breakpoints.extraLarge,
   ),
-  body: MaterialSlotBuilders(
-    smallBody: (_) => const SmallBody(),
-    body: (_) => const MediumBody(),
+  body: (_) => const AdaptiveContent(
+    breakpoints: MaterialAdaptiveBreakpoints(
+      small: Breakpoints.small,
+      medium: Breakpoints.medium,
+      mediumLarge: Breakpoints.mediumLarge,
+      large: Breakpoints.large,
+      extraLarge: Breakpoints.extraLarge,
+    ),
+    body: MaterialSlotBuilders(
+      smallBody: _buildSmallBody,
+      body: _buildMediumBody,
+    ),
   ),
 )
+```
+
+```dart
+Widget _buildSmallBody(BuildContext context) => const SmallBody();
+
+Widget _buildMediumBody(BuildContext context) => const MediumBody();
 ```
 
 ## Common options
@@ -189,14 +216,20 @@ Useful `AdaptiveScaffold` parameters:
 - `destinations`: navigation items
 - `selectedIndex`: active destination index
 - `onSelectedIndexChange`: navigation callback
-- `body`: required `MaterialSlotBuilders`
-- `secondaryBody`: optional secondary pane
-- `bodyRatio`: width split between primary and secondary panes
+- `body`: required `WidgetBuilder`
 - `appBar`: optional `PreferredSizeWidget`
 - `drawerBreakpoint`: override when the drawer should be used
 - `navigationRailWidth`: collapsed rail width
 - `extendedNavigationRailWidth`: expanded rail width
+
+Useful `AdaptiveContent` parameters:
+
+- `body`: required `MaterialSlotBuilders`
+- `secondaryBody`: optional secondary pane
+- `bodyRatio`: width split between primary and secondary panes
 - `internalAnimations`: enable or disable built-in transitions
+- `transitionDuration`: content transition duration
+- `bodyOrientation`: horizontal or vertical split direction
 
 ## Changes from the original package
 
@@ -223,7 +256,7 @@ Both widgets are also available for direct use in custom `AdaptiveLayout` config
 A runnable sample app lives in [example/](/Users/kaska/Documents/Projects/Major/flutter_adaptive_scaffold/example). It demonstrates:
 
 - multiple navigation tabs
-- `MaterialSlotBuilders`-based configuration
+- `AdaptiveContent` with `MaterialSlotBuilders`
 - a secondary pane on larger layouts
 
 Run it with:

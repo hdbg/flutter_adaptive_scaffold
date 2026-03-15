@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 export 'src/adaptive_layout.dart';
+export 'src/material/adaptive_content.dart';
 export 'src/material/adaptive_scaffold.dart';
 export 'src/material/material_breakpoints.dart';
 export 'src/breakpoints.dart';

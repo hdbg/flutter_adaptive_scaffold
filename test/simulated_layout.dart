@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:flutter_adaptive_scaffold/src/material/material_breakpoints.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_breakpoints.dart';
@@ -45,22 +44,22 @@ class TestScaffold extends StatefulWidget {
 
   static const List<NavigationDestination> destinations =
       <NavigationDestination>[
-    NavigationDestination(
-      key: Key('Inbox'),
-      icon: Icon(Icons.inbox),
-      label: 'Inbox',
-    ),
-    NavigationDestination(
-      key: Key('Articles'),
-      icon: Icon(Icons.article),
-      label: 'Articles',
-    ),
-    NavigationDestination(
-      key: Key('Chat'),
-      icon: Icon(Icons.chat),
-      label: 'Chat',
-    ),
-  ];
+        NavigationDestination(
+          key: Key('Inbox'),
+          icon: Icon(Icons.inbox),
+          label: 'Inbox',
+        ),
+        NavigationDestination(
+          key: Key('Articles'),
+          icon: Icon(Icons.article),
+          label: 'Articles',
+        ),
+        NavigationDestination(
+          key: Key('Chat'),
+          icon: Icon(Icons.chat),
+          label: 'Chat',
+        ),
+      ];
 
   @override
   State<TestScaffold> createState() => TestScaffoldState();
@@ -80,7 +79,6 @@ class TestScaffoldState extends State<TestScaffold> {
       },
       drawerBreakpoint: NeverOnBreakpoint(),
       appBarBreakpoint: widget.appBarBreakpoint,
-      internalAnimations: widget.isAnimated,
       breakpoints: MaterialAdaptiveBreakpoints(
         small: TestBreakpoint0(),
         medium: TestBreakpoint800(),
@@ -89,30 +87,38 @@ class TestScaffoldState extends State<TestScaffold> {
         extraLarge: TestBreakpoint1600(),
       ),
       destinations: TestScaffold.destinations,
-      body: MaterialSlotBuilders(
-        smallBody: (_) => Container(key: const Key('smallBody'), color: Colors.red),
-        body: (_) => Container(key: const Key('body'), color: Colors.green),
-        mediumLargeBody: (_) => Container(
-          key: const Key('mediumLargeBody'),
-          color: Colors.blue,
+      body: (_) => AdaptiveContent(
+        internalAnimations: widget.isAnimated,
+        breakpoints: MaterialAdaptiveBreakpoints(
+          small: TestBreakpoint0(),
+          medium: TestBreakpoint800(),
+          mediumLarge: TestBreakpoint1000(),
+          large: TestBreakpoint1200(),
+          extraLarge: TestBreakpoint1600(),
         ),
-        largeBody: (_) => Container(key: const Key('largeBody'), color: Colors.yellow),
-        extraLargeBody: (_) => Container(
-          key: const Key('extraLargeBody'),
-          color: Colors.purple,
+        body: MaterialSlotBuilders(
+          smallBody: (_) =>
+              Container(key: const Key('smallBody'), color: Colors.red),
+          body: (_) => Container(key: const Key('body'), color: Colors.green),
+          mediumLargeBody: (_) =>
+              Container(key: const Key('mediumLargeBody'), color: Colors.blue),
+          largeBody: (_) =>
+              Container(key: const Key('largeBody'), color: Colors.yellow),
+          extraLargeBody: (_) =>
+              Container(key: const Key('extraLargeBody'), color: Colors.purple),
         ),
-      ),
-      secondaryBody: MaterialSlotBuilders(
-        smallBody: (_) => Container(key: const Key('smallSBody'), color: Colors.red),
-        body: (_) => Container(key: const Key('sBody'), color: Colors.green),
-        mediumLargeBody: (_) => Container(
-          key: const Key('mediumLargeSBody'),
-          color: Colors.blue,
-        ),
-        largeBody: (_) => Container(key: const Key('largeSBody'), color: Colors.yellow),
-        extraLargeBody: (_) => Container(
-          key: const Key('extraLargeSBody'),
-          color: Colors.purple,
+        secondaryBody: MaterialSlotBuilders(
+          smallBody: (_) =>
+              Container(key: const Key('smallSBody'), color: Colors.red),
+          body: (_) => Container(key: const Key('sBody'), color: Colors.green),
+          mediumLargeBody: (_) =>
+              Container(key: const Key('mediumLargeSBody'), color: Colors.blue),
+          largeBody: (_) =>
+              Container(key: const Key('largeSBody'), color: Colors.yellow),
+          extraLargeBody: (_) => Container(
+            key: const Key('extraLargeSBody'),
+            color: Colors.purple,
+          ),
         ),
       ),
       leadingExtendedNavRail: const Text('leading_extended'),
@@ -131,27 +137,48 @@ enum SimulatedLayout {
   smallLandscape(width: 500, height: 400, navSlotKey: 'bottomNavigation'),
   mediumLandscape(width: 800, height: 600, navSlotKey: 'primaryNavigation'),
   mediumLargeLandscape(
-      width: 1100, height: 900, navSlotKey: 'primaryNavigation1'),
+    width: 1100,
+    height: 900,
+    navSlotKey: 'primaryNavigation1',
+  ),
   largeLandscape(width: 1400, height: 1000, navSlotKey: 'primaryNavigation2'),
   extraLargeLandscape(
-      width: 1700, height: 1000, navSlotKey: 'primaryNavigation3'),
+    width: 1700,
+    height: 1000,
+    navSlotKey: 'primaryNavigation3',
+  ),
   smallPortraitMediumLandscape(
-      width: 360, height: 650, navSlotKey: 'bottomNavigation'),
+    width: 360,
+    height: 650,
+    navSlotKey: 'bottomNavigation',
+  ),
   smallLandscapeMediumPortrait(
-      width: 650, height: 360, navSlotKey: 'bottomNavigation'),
+    width: 650,
+    height: 360,
+    navSlotKey: 'bottomNavigation',
+  ),
   smallPortraitMediumLargeLandscape(
-      width: 360, height: 900, navSlotKey: 'bottomNavigation'),
+    width: 360,
+    height: 900,
+    navSlotKey: 'bottomNavigation',
+  ),
   smallLandscapeMediumLargePortrait(
-      width: 900, height: 360, navSlotKey: 'primaryNavigation'),
+    width: 900,
+    height: 360,
+    navSlotKey: 'primaryNavigation',
+  ),
   mediumLargeLandscapeMediumPortrait(
-      width: 841, height: 668, navSlotKey: 'primaryNavigation');
+    width: 841,
+    height: 668,
+    navSlotKey: 'primaryNavigation',
+  );
 
   const SimulatedLayout({
     required double width,
     double height = 2000,
     required this.navSlotKey,
-  })  : _width = width,
-        _height = height;
+  }) : _width = width,
+       _height = height;
 
   final double _width;
   final double _height;
@@ -206,8 +233,9 @@ enum SimulatedLayout {
 
   MediaQuery slot(WidgetTester tester) {
     return MediaQuery(
-      data: MediaQueryData.fromView(tester.view)
-          .copyWith(size: Size(_width, _height)),
+      data: MediaQueryData.fromView(
+        tester.view,
+      ).copyWith(size: Size(_width, _height)),
       child: Theme(
         data: ThemeData(),
         child: Directionality(
@@ -283,8 +311,9 @@ enum SimulatedLayout {
 
   MediaQuery slotAndUp(WidgetTester tester) {
     return MediaQuery(
-      data: MediaQueryData.fromView(tester.view)
-          .copyWith(size: Size(_width, _height)),
+      data: MediaQueryData.fromView(
+        tester.view,
+      ).copyWith(size: Size(_width, _height)),
       child: Theme(
         data: ThemeData(),
         child: Directionality(

@@ -10,6 +10,7 @@ import 'package:flutter_adaptive_scaffold/src/rail/overlay_drag_rail.dart';
 import '../adaptive_layout.dart';
 import '../breakpoints.dart';
 import '../slot_layout.dart';
+import 'adaptive_content.dart';
 
 /// Spacing value of the compact breakpoint according to
 /// the material 3 design spec.
@@ -73,11 +74,15 @@ typedef NavigationRailDestinationBuilder =
 ///    NavigationDestination(icon: Icon(Icons.chat), label: 'Chat'),
 ///    NavigationDestination(icon: Icon(Icons.video_call), label: 'Video'),
 ///  ],
-///  smallBody: (_) => ListView.builder(
-///    itemCount: children.length,
-///    itemBuilder: (_, idx) => children[idx]
+///  body: (_) => AdaptiveContent(
+///    body: MaterialSlotBuilders(
+///      smallBody: (_) => ListView.builder(
+///        itemCount: children.length,
+///        itemBuilder: (_, idx) => children[idx],
+///      ),
+///      body: (_) => GridView.count(crossAxisCount: 2, children: children),
+///    ),
 ///  ),
-///  body: (_) => GridView.count(crossAxisCount: 2, children: children),
 /// ),
 /// ```
 ///
@@ -105,14 +110,8 @@ class AdaptiveScaffold extends StatefulWidget {
       kNavigationRailDefaultPadding,
     ),
     required this.body,
-    this.secondaryBody,
-    this.bodyRatio,
     this.breakpoints = const MaterialAdaptiveBreakpoints(),
-
     this.drawerBreakpoint = Breakpoints.smallDesktop,
-    this.internalAnimations = true,
-    this.transitionDuration = const Duration(seconds: 1),
-    this.bodyOrientation = Axis.horizontal,
     this.onSelectedIndexChange,
     this.useDrawer = true,
     this.appBar,
@@ -153,39 +152,13 @@ class AdaptiveScaffold extends StatefulWidget {
   /// The alignment of the destinations in the navigation rail.
   final double? groupAlignment;
 
-  /// Widget to be displayed in the body slot at the compact breakpoint.
-  final MaterialSlotBuilders body;
-
-  /// Widget to be displayed in the secondary body slot at the compact breakpoint.
-  final MaterialSlotBuilders? secondaryBody;
-
-  /// Defines the fractional ratio of body to the secondaryBody.
+  /// Builder for the scaffold's content area.
   ///
-  /// For example 0.3 would mean body takes up 30% of the available space and
-  /// secondaryBody takes up the rest.
-  ///
-  /// If this value is null, the ratio is defined so that the split axis is in
-  /// the center of the screen.
-  final double? bodyRatio;
+  /// Pass [AdaptiveContent] here when you want breakpoint-aware body and
+  /// secondary body rendering with the package's default content transitions.
+  final WidgetBuilder body;
 
   final MaterialAdaptiveBreakpoints breakpoints;
-
-  /// Whether or not the developer wants the smooth entering slide transition on
-  /// secondaryBody.
-  ///
-  /// Defaults to true.
-  final bool internalAnimations;
-
-  /// Defines the duration of transition between layouts.
-  ///
-  /// Defaults to [Duration(seconds: 1)].
-  final Duration transitionDuration;
-
-  /// The orientation of the body and secondaryBody. Either horizontal (side by
-  /// side) or vertical (top to bottom).
-  ///
-  /// Defaults to Axis.horizontal.
-  final Axis bodyOrientation;
 
   /// Whether to use a [Drawer] over a [BottomNavigationBar] when not on mobile
   /// and Breakpoint is small.
@@ -555,19 +528,18 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             )
           : null,
       body: AdaptiveLayout(
-        transitionDuration: widget.transitionDuration,
-        bodyOrientation: widget.bodyOrientation,
-        bodyRatio: widget.bodyRatio,
-        internalAnimations: widget.internalAnimations,
         primaryNavigation: _createPrimaryNavigation(destinations, navRailTheme),
         bottomNavigation:
             !widget.drawerBreakpoint.isActive(context) || !widget.useDrawer
             ? _createBottomNavigation()
             : null,
-        body: widget.body.toSlotLayout(widget.breakpoints, prefix: 'body'),
-        secondaryBody: widget.secondaryBody?.toSlotLayout(
-          widget.breakpoints,
-          prefix: 'secondaryBody',
+        body: SlotLayout(
+          config: <Breakpoint, SlotLayoutConfig>{
+            Breakpoints.standard: SlotLayout.from(
+              key: const Key('scaffoldBody'),
+              builder: widget.body,
+            ),
+          },
         ),
       ),
     );

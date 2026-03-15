@@ -206,7 +206,6 @@ class _MailWorkspaceScreenState extends State<MailWorkspaceScreen> {
         });
       },
       destinations: _destinations,
-      bodyRatio: 0.62,
       leadingExtendedNavRail: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 20),
         child: _WorkspaceBadge(color: activeTab.accent),
@@ -226,18 +225,21 @@ class _MailWorkspaceScreenState extends State<MailWorkspaceScreen> {
           icon: const Icon(Icons.notifications_active_outlined),
         ),
       ),
-      body: MaterialSlotBuilders(
-        smallBody: (_) => _WorkspaceFeed(tab: activeTab),
-        body: (_) => _WorkspaceFeed(tab: activeTab),
-        mediumLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
-        largeBody: (_) => _WorkspaceFeed(tab: activeTab),
-        extraLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
-      ),
-      secondaryBody: MaterialSlotBuilders(
-        body: (_) => _WorkspaceDetails(tab: activeTab),
-        mediumLargeBody: (_) => _WorkspaceDetails(tab: activeTab),
-        largeBody: (_) => _WorkspaceDetails(tab: activeTab),
-        extraLargeBody: (_) => _WorkspaceDetails(tab: activeTab),
+      body: (_) => AdaptiveContent(
+        bodyRatio: 0.62,
+        body: MaterialSlotBuilders(
+          smallBody: (_) => _WorkspaceFeed(tab: activeTab),
+          body: (_) => _WorkspaceFeed(tab: activeTab),
+          mediumLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
+          largeBody: (_) => _WorkspaceFeed(tab: activeTab),
+          extraLargeBody: (_) => _WorkspaceFeed(tab: activeTab),
+        ),
+        secondaryBody: MaterialSlotBuilders(
+          body: (_) => _WorkspaceDetails(tab: activeTab),
+          mediumLargeBody: (_) => _WorkspaceDetails(tab: activeTab),
+          largeBody: (_) => _WorkspaceDetails(tab: activeTab),
+          extraLargeBody: (_) => _WorkspaceDetails(tab: activeTab),
+        ),
       ),
     );
   }
@@ -263,10 +265,7 @@ class _WorkspaceFeed extends StatelessWidget {
         children: <Widget>[
           _HeroPanel(tab: tab),
           const SizedBox(height: 20),
-          Text(
-            'Today',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          Text('Today', style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: 12),
           for (final _WorkspaceCard card in tab.cards) ...<Widget>[
             _MetricCard(card: card, accent: tab.accent),
@@ -375,10 +374,7 @@ class _HeroPanel extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         gradient: LinearGradient(
-          colors: <Color>[
-            tab.accent,
-            tab.accent.withValues(alpha: 0.68),
-          ],
+          colors: <Color>[tab.accent, tab.accent.withValues(alpha: 0.68)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -474,9 +470,9 @@ class _MetricCard extends StatelessWidget {
             const SizedBox(width: 16),
             Text(
               card.value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -514,10 +510,7 @@ class _ActivityTile extends StatelessWidget {
           ),
           const SizedBox(width: 14),
           Expanded(
-            child: Text(
-              text,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
           ),
         ],
       ),
@@ -558,10 +551,7 @@ class _SidePanelCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
             const SizedBox(height: 16),
@@ -598,9 +588,9 @@ class _WorkspaceBadge extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             'Northline',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 4),
           Text(
@@ -626,15 +616,9 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
           ),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+          Text(value, style: Theme.of(context).textTheme.titleSmall),
         ],
       ),
     );
