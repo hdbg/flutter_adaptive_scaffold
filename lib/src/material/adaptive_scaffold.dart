@@ -112,6 +112,7 @@ class AdaptiveScaffold extends StatefulWidget {
     required this.body,
     this.breakpoints = const MaterialAdaptiveBreakpoints(),
     this.drawerBreakpoint = Breakpoints.smallDesktop,
+    this.transitionDuration = const Duration(seconds: 1),
     this.onSelectedIndexChange,
     this.useDrawer = true,
     this.appBar,
@@ -159,6 +160,13 @@ class AdaptiveScaffold extends StatefulWidget {
   final WidgetBuilder body;
 
   final MaterialAdaptiveBreakpoints breakpoints;
+
+  /// Defines the duration of transition between scaffold layouts.
+  ///
+  /// This affects navigation element transitions and the outer scaffold slot
+  /// layout. Content transitions inside [AdaptiveContent] are controlled by
+  /// [AdaptiveContent.transitionDuration].
+  final Duration transitionDuration;
 
   /// Whether to use a [Drawer] over a [BottomNavigationBar] when not on mobile
   /// and Breakpoint is small.
@@ -528,6 +536,7 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             )
           : null,
       body: AdaptiveLayout(
+        transitionDuration: widget.transitionDuration,
         primaryNavigation: _createPrimaryNavigation(destinations, navRailTheme),
         bottomNavigation:
             !widget.drawerBreakpoint.isActive(context) || !widget.useDrawer

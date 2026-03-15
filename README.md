@@ -217,6 +217,7 @@ Useful `AdaptiveScaffold` parameters:
 - `selectedIndex`: active destination index
 - `onSelectedIndexChange`: navigation callback
 - `body`: required `WidgetBuilder`
+- `transitionDuration`: scaffold navigation/layout transition duration
 - `appBar`: optional `PreferredSizeWidget`
 - `drawerBreakpoint`: override when the drawer should be used
 - `navigationRailWidth`: collapsed rail width
